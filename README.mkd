@@ -1,0 +1,18 @@
+# Drano
+
+Drano is a queue cleaner for SQS. It connects to a queue as a worker, and then prints each message. Nothing else.
+
+## Usage
+
+    $ gem install drano
+    $ drano --access-key=<AWS_ACCESS_KEY> --secret-key=<AWS_SECRET_KEY> --queue=myawesomequeue
+
+## Options
+
+* `--access-key` sets the AWS access key.
+* `--secret-key` sets the AWS secret key.
+* `--queue` sets the SQS queue name to use (not the whole URL, just the queue name).
+
+## License
+
+Drano is © 2011 Rémi Prévost and may be freely distributed under the [LITL license](http://litl.info/). See the `LICENSE` file.

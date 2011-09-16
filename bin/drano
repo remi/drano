@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+
+def bail(msg); puts "[Drano] #{msg}"; exit 1; end
+
+require 'rubygems'
+require 'drano'
+require 'optparse'
+
+options = {}
+opts = OptionParser.new do |opts|
+  opts.banner = "Usage: drano <options>
+
+Options:
+  "
+  opts.on("--access-key [ACCESS_KEY]", "Set the AWS access key") do |access_key|
+    options[:access_key] = access_key
+  end
+
+  opts.on("--secret-key [SECRET_KEY]", "Set the AWS secret key") do |secret_key|
+    options[:secret_key] = secret_key
+  end
+
+  opts.on("--queue [QUEUE]", "Set the SQS queue name to print") do |queue|
+    options[:queue] = queue
+  end
+
+end
+opts.parse!
+
+bail("You must specify an access key, a secret key and a queue.") unless %w{queue secret_key access_key}.map{ |option| options[option.to_sym] }.compact.count == 3
+
+queue = Drano::Queue.new(:access_key => options[:access_key], :secret_key => options[:secret_key], :queue_name => options[:queue])
+queue.poll do |message|
+  puts message.body.inspect
+end
